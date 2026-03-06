@@ -233,6 +233,11 @@ input[type="range"]:hover::-webkit-slider-thumb{box-shadow:0 0 14px rgba(0,229,1
           <div class="res-label">🚀 Hozirgi ROAS</div>
           <div class="res-num big" id="r1-roas-now">×3.00</div>
           <div id="r1-badge" class="status-badge badge-good">✓ Yaxshi</div>
+          <div id="r1-low-alert" style="display:none;margin-top:16px;background:rgba(255,77,109,.07);border:1px solid rgba(255,77,109,.3);border-radius:12px;padding:16px 18px;">
+            <div style="font-size:13px;font-weight:700;color:#ff4d6d;margin-bottom:8px;">⚠️ ROAS juda past!</div>
+            <div style="font-size:13px;color:#c0c0d8;line-height:1.6;margin-bottom:14px;">Reklama samaradorligingiz past — target yoki kreativlarda muammo bo&#x2019;lishi mumkin.<br><br><span style="color:#e8e8f0;font-weight:600;">Vena Agency</span> bilan hamkorlikda ROAS ni tiklash va o&#x2019;stirish mumkin.</div>
+            <a href="https://t.me/zabihulloh_mrktlg" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#ff4d6d;color:#fff;font-family:Syne,sans-serif;font-size:13px;font-weight:700;padding:10px 18px;border-radius:8px;text-decoration:none;">✉️ Bog&#x2019;lanish →</a>
+          </div>
         </div>
         <div style="flex:1;min-width:220px;padding-top:4px;">
           <div class="roas-meter">
@@ -518,9 +523,10 @@ function calcRoas(){
   document.getElementById('r1-bar').style.width = pct + '%';
 
   const badge = document.getElementById('r1-badge');
-  if(roas>=3){badge.className='status-badge badge-good';badge.textContent='✓ Yaxshi ROAS';}
-  else if(roas>=2){badge.className='status-badge badge-ok';badge.textContent='~ O\'rtacha ROAS';}
-  else{badge.className='status-badge badge-bad';badge.textContent='✗ Past ROAS';}
+  const alert = document.getElementById('r1-low-alert');
+  if(roas>=3){badge.className='status-badge badge-good';badge.textContent='✓ Yaxshi ROAS';alert.style.display='none';}
+  else if(roas>=2){badge.className='status-badge badge-ok';badge.textContent='~ O\'rtacha ROAS';alert.style.display='none';}
+  else{badge.className='status-badge badge-bad';badge.textContent='✗ Past ROAS';alert.style.display='block';}
 }
 
 /* PANEL 2: TARGET BYUDJET */
