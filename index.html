@@ -3,676 +3,598 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Target Byudjet Kalkulyatori</title>
+<title>Marketing Kalkulyatorlari — Vena Agency</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --surface2: #1a1a24;
-    --border: #2a2a3a;
-    --accent: #00e5a0;
-    --accent2: #7c3aed;
-    --accent3: #f59e0b;
-    --text: #e8e8f0;
-    --muted: #6b6b8a;
-    --danger: #ff4d6d;
-  }
+:root {
+  --bg:#0a0a0f; --surface:#111118; --surface2:#1a1a24; --border:#2a2a3a;
+  --accent:#00e5a0; --accent2:#7c3aed; --accent3:#f59e0b;
+  --text:#e8e8f0; --muted:#6b6b8a; --danger:#ff4d6d; --green:#34d399;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:32px 20px 0;}
+body::before{content:'';position:fixed;top:-200px;right:-200px;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(0,229,160,.06) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.container{max-width:860px;margin:0 auto;position:relative;z-index:1;}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* header */
+.header{margin-bottom:36px;}
+.brand-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.header h1{font-size:clamp(24px,4vw,38px);font-weight:800;letter-spacing:-.5px;}
+.header h1 span{color:var(--accent);}
+.header p{color:var(--muted);font-size:14px;margin-top:6px;font-weight:400;}
 
-  body {
-    font-family: 'Syne', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 40px 20px;
-    overflow-x: hidden;
-  }
+/* tabs */
+.tab-bar{display:flex;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:6px;margin-bottom:32px;}
+.tab-btn{flex:1;padding:12px 10px;border:none;border-radius:10px;background:transparent;color:var(--muted);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .25s;line-height:1.3;text-align:center;}
+.tab-btn:hover{color:var(--text);background:var(--surface2);}
+.tab-btn.active{background:var(--accent);color:#050f0a;}
+.tab-icon{font-size:18px;display:block;margin-bottom:4px;}
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: -200px; left: -200px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
+/* panels */
+.panel{display:none;} .panel.active{display:block;}
 
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -200px; right: -200px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+/* card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px;}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
 
-  .container {
-    max-width: 820px;
-    margin: 0 auto;
-  }
+/* input grid */
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:560px){.input-grid{grid-template-columns:1fr;}}
+.input-group{display:flex;flex-direction:column;gap:7px;}
+.input-group.full{grid-column:1/-1;}
+label{font-size:13px;color:var(--muted);font-weight:600;}
+.input-wrap{position:relative;display:flex;align-items:center;}
+input[type="number"]{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:11px 16px;font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--text);
+  outline:none;transition:border-color .2s,box-shadow .2s;-moz-appearance:textfield;}
+input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type="number"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,160,.1);}
+.input-suffix{position:absolute;right:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);pointer-events:none;}
 
-  header {
-    margin-bottom: 48px;
-  }
+/* range */
+.range-group{display:flex;flex-direction:column;gap:7px;}
+.range-header{display:flex;justify-content:space-between;align-items:center;}
+.range-val{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--accent);font-weight:500;}
+input[type="range"]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 8px rgba(0,229,160,.4);transition:box-shadow .2s;}
+input[type="range"]:hover::-webkit-slider-thumb{box-shadow:0 0 14px rgba(0,229,160,.6);}
+.range-labels{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;}
 
-  .tag {
-    display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    padding: 4px 10px;
-    border-radius: 2px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
+/* result section */
+.result-section{background:linear-gradient(135deg,rgba(0,229,160,.06),rgba(124,58,237,.06));
+  border:1px solid rgba(0,229,160,.2);border-radius:16px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.result-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.result-section.purple-top::before{background:linear-gradient(90deg,var(--accent2),#ec4899);}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.result-grid-2{grid-template-columns:repeat(2,1fr);}
+.result-grid-4{grid-template-columns:repeat(2,1fr);}
+@media(max-width:560px){.result-grid,.result-grid-4{grid-template-columns:1fr 1fr;}}
 
-  h1 {
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -1px;
-  }
+.res-card{display:flex;flex-direction:column;gap:5px;}
+.res-label{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+.res-num{font-family:'IBM Plex Mono',monospace;font-size:clamp(20px,3vw,30px);font-weight:500;line-height:1;transition:all .25s;}
+.res-num.big{font-size:clamp(30px,5vw,46px);color:var(--accent);}
+.res-sub{font-size:12px;color:var(--muted);}
 
-  h1 span {
-    color: var(--accent);
-  }
+/* formula */
+.formula-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);line-height:1.9;margin-top:20px;}
+.formula-box strong{color:var(--accent);}
 
-  .subtitle {
-    margin-top: 12px;
-    color: var(--muted);
-    font-size: 15px;
-    font-weight: 400;
-  }
+/* roas meter */
+.roas-meter{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;}
+.roas-meter-label{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;}
+.roas-bar-bg{height:10px;background:var(--border);border-radius:5px;overflow:hidden;}
+.roas-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .4s ease;max-width:100%;}
+.roas-zones{display:flex;justify-content:space-between;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);}
 
-  /* FUNNEL */
-  .funnel-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 24px;
-  }
+/* funnel */
+.funnel-steps{display:flex;flex-direction:column;}
+.step{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:14px;padding:18px 0;border-bottom:1px solid var(--border);}
+.step:last-child{border-bottom:none;}
+.step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;flex-shrink:0;}
+.s1 .step-num{background:rgba(0,229,160,.15);color:var(--accent);border:1px solid rgba(0,229,160,.3);}
+.s2 .step-num{background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.3);}
+.s3 .step-num{background:rgba(245,158,11,.15);color:var(--accent3);border:1px solid rgba(245,158,11,.3);}
+.s4 .step-num{background:rgba(255,77,109,.15);color:var(--danger);border:1px solid rgba(255,77,109,.3);}
+.step-title{font-size:14px;font-weight:600;margin-bottom:3px;}
+.step-desc{font-size:12px;color:var(--muted);}
+.step-val{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:500;text-align:right;}
+.step-sub{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;text-align:right;}
+.s1 .step-val{color:var(--accent);} .s2 .step-val{color:#a78bfa;} .s3 .step-val{color:var(--accent3);} .s4 .step-val{color:var(--danger);}
+.connector{display:flex;align-items:center;gap:8px;padding:0 0 0 46px;color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace;}
+.connector::before{content:'↓';font-size:16px;}
 
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
+/* breakdown */
+.breakdown-table{width:100%;border-collapse:collapse;}
+.breakdown-table th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:1px;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--border);}
+.breakdown-table td{padding:11px 10px;font-size:14px;border-bottom:1px solid rgba(42,42,58,.5);}
+.breakdown-table td:last-child{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--accent);}
 
-  .funnel-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+/* badge */
+.status-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;margin-top:10px;}
+.badge-good{background:rgba(0,229,160,.12);color:var(--accent);border:1px solid rgba(0,229,160,.25);}
+.badge-ok{background:rgba(245,158,11,.12);color:var(--accent3);border:1px solid rgba(245,158,11,.25);}
+.badge-bad{background:rgba(255,77,109,.12);color:var(--danger);border:1px solid rgba(255,77,109,.25);}
 
-  .step {
-    display: grid;
-    grid-template-columns: 32px 1fr auto;
-    align-items: center;
-    gap: 16px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-    transition: all 0.2s;
-  }
+/* roas section title */
+.roas-section-title{display:flex;align-items:center;gap:16px;margin-bottom:16px;margin-top:8px;}
+.roas-section-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;flex-shrink:0;
+  background:rgba(0,229,160,.15);color:var(--accent);border:1px solid rgba(0,229,160,.3);}
+.roas-section-head{font-size:18px;font-weight:700;margin-bottom:3px;}
+.roas-section-sub{font-size:13px;color:var(--muted);font-weight:400;}
 
-  .step:last-child { border-bottom: none; }
+/* divider */
+.section-divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
 
-  .step-num {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
+/* CTA FOOTER */
+.cta-footer{
+  margin-top:48px;
+  background:linear-gradient(135deg,rgba(0,229,160,.08),rgba(124,58,237,.1));
+  border:1px solid rgba(0,229,160,.2);
+  border-radius:20px;
+  padding:40px 36px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.cta-footer-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+.cta-footer h2{font-size:clamp(20px,3vw,30px);font-weight:800;letter-spacing:-.5px;margin-bottom:10px;line-height:1.2;}
+.cta-footer h2 span{color:var(--accent);}
+.cta-footer p{color:var(--muted);font-size:15px;margin-bottom:28px;font-weight:400;}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--accent);color:#050f0a;
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  padding:15px 36px;border-radius:12px;text-decoration:none;
+  transition:all .2s;box-shadow:0 0 30px rgba(0,229,160,.2);
+}
+.cta-btn:hover{background:#00ffb3;box-shadow:0 0 40px rgba(0,229,160,.4);transform:translateY(-1px);}
+.cta-footer-note{margin-top:16px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
 
-  .step-1 .step-num { background: rgba(0,229,160,0.15); color: var(--accent); border: 1px solid rgba(0,229,160,0.3); }
-  .step-2 .step-num { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
-  .step-3 .step-num { background: rgba(245,158,11,0.15); color: var(--accent3); border: 1px solid rgba(245,158,11,0.3); }
-  .step-4 .step-num { background: rgba(255,77,109,0.15); color: var(--danger); border: 1px solid rgba(255,77,109,0.3); }
+/* page bottom spacing */
+.page-bottom{height:60px;}
 
-  .step-info { flex: 1; }
-  .step-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-  .step-desc { font-size: 13px; color: var(--muted); }
-
-  .step-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 22px;
-    font-weight: 500;
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  .step-1 .step-value { color: var(--accent); }
-  .step-2 .step-value { color: #a78bfa; }
-  .step-3 .step-value { color: var(--accent3); }
-  .step-4 .step-value { color: var(--danger); }
-
-  .step-sublabel {
-    font-size: 11px;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .connector {
-    display: flex;
-    align-items: center;
-    padding: 0 0 0 16px;
-    color: var(--muted);
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    gap: 8px;
-    margin: -4px 0;
-  }
-
-  .connector::before {
-    content: '↓';
-    font-size: 18px;
-  }
-
-  /* INPUTS */
-  .inputs-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 24px;
-  }
-
-  .input-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  @media (max-width: 600px) {
-    .input-grid { grid-template-columns: 1fr; }
-  }
-
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .input-group.full { grid-column: 1 / -1; }
-
-  label {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 600;
-    letter-spacing: 0.3px;
-  }
-
-  .input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  input[type="number"] {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 16px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -moz-appearance: textfield;
-  }
-
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-  input[type="number"]:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0,229,160,0.1);
-  }
-
-  .input-suffix {
-    position: absolute;
-    right: 14px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    pointer-events: none;
-  }
-
-  /* RANGE */
-  .range-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .range-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    outline: none;
-    cursor: pointer;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 3px solid var(--bg);
-    box-shadow: 0 0 8px rgba(0,229,160,0.4);
-    transition: box-shadow 0.2s;
-  }
-
-  input[type="range"]:hover::-webkit-slider-thumb {
-    box-shadow: 0 0 14px rgba(0,229,160,0.6);
-  }
-
-  .range-val {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  /* RESULT */
-  .result-section {
-    background: linear-gradient(135deg, rgba(0,229,160,0.06), rgba(124,58,237,0.06));
-    border: 1px solid rgba(0,229,160,0.25);
-    border-radius: 16px;
-    padding: 36px 32px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .result-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-  }
-
-  .result-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  @media (max-width: 600px) {
-    .result-grid { grid-template-columns: 1fr; }
-  }
-
-  .result-card {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .result-label {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .result-number {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: clamp(20px, 3vw, 30px);
-    font-weight: 500;
-    line-height: 1;
-    transition: all 0.3s;
-  }
-
-  .result-sub {
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .main-result .result-number {
-    font-size: clamp(32px, 5vw, 52px);
-    color: var(--accent);
-  }
-
-  .divider-v {
-    width: 1px;
-    background: var(--border);
-    align-self: stretch;
-  }
-
-  /* FORMULA BADGE */
-  .formula-box {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 20px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.8;
-    margin-top: 24px;
-  }
-
-  .formula-box strong { color: var(--accent); }
-
-  /* RANGE LABELS */
-  .range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  .pulse {
-    animation: pulse 0.3s ease;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-
-  .breakdown-table {
-    width: 100%;
-    margin-top: 24px;
-    border-collapse: collapse;
-  }
-
-  .breakdown-table th {
-    text-align: left;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .breakdown-table td {
-    padding: 12px 12px;
-    font-size: 14px;
-    border-bottom: 1px solid rgba(42,42,58,0.5);
-  }
-
-  .breakdown-table td:last-child {
-    font-family: 'IBM Plex Mono', monospace;
-    text-align: right;
-    color: var(--accent);
-  }
+/* pulse */
+.pulse{animation:pulse .28s ease;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
 <div class="container">
 
-  <header>
-    <div class="tag">Marketing Tool</div>
-    <h1>Target <span>Byudjet</span><br>Kalkulyatori</h1>
-    <p class="subtitle">Sotuv maqsadingizdan byudjetgacha — avtomatik hisob</p>
-  </header>
+  <div class="header">
+    <div class="brand-tag">✦ Vena Agency — Marketing Tools</div>
+    <h1>Marketing <span>Kalkulyatorlari</span></h1>
+    <p>Reklama byudjeti, ROAS va funnel hisoblash uchun 3 ta qurol</p>
+  </div>
 
-  <!-- INPUTS -->
-  <div class="inputs-section">
-    <div class="section-label">📊 Parametrlar</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-icon">🚀</span>ROAS</button>
+    <button class="tab-btn" onclick="switchTab(1)"><span class="tab-icon">🎯</span>Target Byudjet</button>
+    <button class="tab-btn" onclick="switchTab(2)"><span class="tab-icon">⚡</span>To'liq Hisob</button>
+  </div>
 
-    <div class="input-grid">
-      <div class="input-group">
-        <label>🎯 Maqsad — Sotuvlar soni (oyiga)</label>
-        <div class="input-wrap">
-          <input type="number" id="sales" value="100" min="1" oninput="calc()">
-          <span class="input-suffix">ta sotuv</span>
-        </div>
+  <!-- ══════════════════ PANEL 1 — ROAS ══════════════════ -->
+  <div class="panel active" id="panel-0">
+
+    <!-- 01 HOZIRGI ROAS -->
+    <div class="roas-section-title">
+      <span class="roas-section-num">01</span>
+      <div>
+        <div class="roas-section-head">Hozirgi ROAS ni hisoblash</div>
+        <div class="roas-section-sub">O'tgan kampaniyangiz qanchalik samarali ishladi?</div>
       </div>
+    </div>
 
-      <div class="input-group">
-        <label>💰 1 ta oddiy lid narxi ($)</label>
-        <div class="input-wrap">
-          <input type="number" id="leadCost" value="2" min="0" step="0.1" oninput="calc()">
-          <span class="input-suffix">$</span>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label>🛍️ 1 mahsulot o'rtacha narxi ($)</label>
-        <div class="input-wrap">
-          <input type="number" id="productPrice" value="50" min="0" step="1" oninput="calc()">
-          <span class="input-suffix">$</span>
-        </div>
-      </div>
-
-      <div class="input-group full">
-        <div class="range-group">
-          <div class="range-header">
-            <label>🔄 Lid → Sifatli lid konversiyasi</label>
-            <span class="range-val" id="conv1Val">50%</span>
+    <div class="card">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>💸 Reklamaga ishlatilgan summa</label>
+          <div class="input-wrap">
+            <input type="number" id="r1-spend" value="500" min="0" step="10" oninput="calcRoas()">
+            <span class="input-suffix">$</span>
           </div>
-          <input type="range" id="conv1" min="10" max="90" value="50" oninput="calc()">
-          <div class="range-labels"><span>10%</span><span>50%</span><span>90%</span></div>
         </div>
-      </div>
-
-      <div class="input-group full">
-        <div class="range-group">
-          <div class="range-header">
-            <label>✅ Sifatli lid → Sotuv konversiyasi</label>
-            <span class="range-val" id="conv2Val">10%</span>
+        <div class="input-group">
+          <label>📈 Reklamadan kelgan daromad</label>
+          <div class="input-wrap">
+            <input type="number" id="r1-revenue" value="1500" min="0" step="10" oninput="calcRoas()">
+            <span class="input-suffix">$</span>
           </div>
-          <input type="range" id="conv2" min="1" max="50" value="10" oninput="calc()">
-          <div class="range-labels"><span>1%</span><span>25%</span><span>50%</span></div>
+        </div>
+        <div class="input-group">
+          <label>📦 Sotilgan mahsulotlar soni</label>
+          <div class="input-wrap">
+            <input type="number" id="r1-units" value="30" min="0" step="1" oninput="calcRoas()">
+            <span class="input-suffix">ta</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>🛍️ 1 mahsulot tannarxi</label>
+          <div class="input-wrap">
+            <input type="number" id="r1-cogs" value="20" min="0" step="1" oninput="calcRoas()">
+            <span class="input-suffix">$</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- FUNNEL -->
-  <div class="funnel-section">
-    <div class="section-label">🔽 Funnel — Hisob bosqichlari</div>
-
-    <div class="funnel-steps">
-      <div class="step step-1">
-        <div class="step-num">01</div>
-        <div class="step-info">
-          <div class="step-title">Sotuv maqsadi</div>
-          <div class="step-desc">Bir oyda yopilishi kerak bo'lgan bitimlar</div>
+    <div class="result-section">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:24px;">
+        <div class="res-card" style="flex:0 0 auto;">
+          <div class="res-label">🚀 Hozirgi ROAS</div>
+          <div class="res-num big" id="r1-roas-now">×3.00</div>
+          <div id="r1-badge" class="status-badge badge-good">✓ Yaxshi</div>
         </div>
-        <div>
-          <div class="step-value" id="f-sales">100 ta</div>
-          <div class="step-sublabel">TARGET</div>
-        </div>
-      </div>
-
-      <div class="connector" id="c1-label">÷ 10% (sotuv konv.)</div>
-
-      <div class="step step-2">
-        <div class="step-num">02</div>
-        <div class="step-info">
-          <div class="step-title">Sifatli lidlar</div>
-          <div class="step-desc">Sotuvga tayyor, qualified leads</div>
-        </div>
-        <div>
-          <div class="step-value" id="f-qualified">1 000 ta</div>
-          <div class="step-sublabel">QUALIFIED</div>
+        <div style="flex:1;min-width:220px;padding-top:4px;">
+          <div class="roas-meter">
+            <div class="roas-meter-label">
+              <span>ROAS darajasi</span>
+              <span id="r1-roas-label" style="color:var(--accent)">×3.00</span>
+            </div>
+            <div class="roas-bar-bg"><div class="roas-bar-fill" id="r1-bar" style="width:60%"></div></div>
+            <div class="roas-zones"><span>×1 zarar</span><span>×2 oddiy</span><span>×3 yaxshi</span><span>×5+</span></div>
+          </div>
         </div>
       </div>
-
-      <div class="connector" id="c2-label">÷ 50% (sifat konv.)</div>
-
-      <div class="step step-3">
-        <div class="step-num">03</div>
-        <div class="step-info">
-          <div class="step-title">Oddiy lidlar</div>
-          <div class="step-desc">Reklamadan tushgan barcha kontaktlar</div>
+      <div class="result-grid result-grid-4">
+        <div class="res-card">
+          <div class="res-label">💰 Sof foyda</div>
+          <div class="res-num" id="r1-profit" style="color:var(--green)">$380</div>
+          <div class="res-sub">daromad − tannarx − reklama</div>
         </div>
-        <div>
-          <div class="step-value" id="f-raw">2 000 ta</div>
-          <div class="step-sublabel">RAW LEADS</div>
+        <div class="res-card">
+          <div class="res-label">📊 Foyda marjasi</div>
+          <div class="res-num" id="r1-margin" style="color:#a78bfa">25.3%</div>
+          <div class="res-sub">sof foyda / daromad</div>
         </div>
-      </div>
-
-      <div class="connector">× narx</div>
-
-      <div class="step step-4">
-        <div class="step-num">04</div>
-        <div class="step-info">
-          <div class="step-title">Kerakli byudjet</div>
-          <div class="step-desc">Umumiy reklama xarajati</div>
+        <div class="res-card">
+          <div class="res-label">🛒 1 sotuvga xarajat</div>
+          <div class="res-num" id="r1-cac" style="color:var(--accent3)">$16.67</div>
+          <div class="res-sub">reklama / sotuvlar soni</div>
         </div>
-        <div>
-          <div class="step-value" id="f-budget">30 000 000</div>
-          <div class="step-sublabel">$ / oy</div>
+        <div class="res-card">
+          <div class="res-label">💵 1 sotuvdan foyda</div>
+          <div class="res-num" id="r1-ppu" style="color:var(--green)">$12.67</div>
+          <div class="res-sub">foyda / sotuvlar soni</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- RESULT -->
-  <div class="result-section">
-    <div class="result-grid" style="grid-template-columns: repeat(2,1fr); gap:20px;">
-      <div class="result-card main-result">
-        <div class="result-label">💵 Byudjet</div>
-        <div class="result-number" id="r-budget">30 000 000</div>
-        <div class="result-sub">$ / oy</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">📦 Jami lidlar</div>
-        <div class="result-number" id="r-raw" style="color:#f59e0b">2 000</div>
-        <div class="result-sub">ta oddiy lid</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">💸 1 sotuv narxi (CAC)</div>
-        <div class="result-number" id="r-cps" style="color:#a78bfa">300</div>
-        <div class="result-sub">$ / sotuv</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">📈 Jami daromad</div>
-        <div class="result-number" id="r-revenue" style="color:#34d399">5,000</div>
-        <div class="result-sub">$ / oy</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">🚀 ROAS</div>
-        <div class="result-number" id="r-roas" style="color:#fb923c">×2.5</div>
-        <div class="result-sub">har $1 ga qaytim</div>
+    <hr class="section-divider">
+
+    <!-- 02 KELAJAKDAGI ROAS -->
+    <div class="roas-section-title">
+      <span class="roas-section-num" style="background:rgba(124,58,237,.15);color:#a78bfa;border-color:rgba(124,58,237,.3);">02</span>
+      <div>
+        <div class="roas-section-head">Kelajakdagi ROAS ni rejalashtirish</div>
+        <div class="roas-section-sub">Qancha sarflasam, qancha daromad keladi?</div>
       </div>
     </div>
 
-    <div class="formula-box">
-      <strong>Formula:</strong><br>
-      Oddiy lid soni = Sotuv maqsadi ÷ (Sifat konv. × Sotuv konv.)<br>
-      <strong>Byudjet</strong> = Oddiy lid soni × lid narxi<br>
-      <strong>Daromad</strong> = Sotuv soni × mahsulot narxi<br>
-      <strong>ROAS</strong> = Daromad ÷ Byudjet
+    <div class="card">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>💸 Ishlatmoqchi bo'lgan summa</label>
+          <div class="input-wrap">
+            <input type="number" id="r1-fspend" value="1000" min="0" step="50" oninput="calcRoas()">
+            <span class="input-suffix">$</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>🎯 Ko'zlanayotgan ROAS</label>
+          <div class="input-wrap">
+            <input type="number" id="r1-froas" value="3" min="0" step="0.1" oninput="calcRoas()">
+            <span class="input-suffix">×</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-section purple-top">
+      <div class="result-grid">
+        <div class="res-card">
+          <div class="res-label">📈 Kutilayotgan daromad</div>
+          <div class="res-num big" id="r1-frev" style="color:#a78bfa">$3,000</div>
+          <div class="res-sub">$ / kampaniya</div>
+        </div>
+        <div class="res-card">
+          <div class="res-label">💰 Kutilayotgan foyda</div>
+          <div class="res-num" id="r1-fprofit" style="color:var(--green)">$1,560</div>
+          <div class="res-sub">avvalgi marja asosida</div>
+        </div>
+        <div class="res-card">
+          <div class="res-label">📦 Taxminiy sotuvlar</div>
+          <div class="res-num" id="r1-funits" style="color:var(--accent3)">60 ta</div>
+          <div class="res-sub">hozirgi o'rtacha narx asosida</div>
+        </div>
+      </div>
+      <div class="formula-box">
+        <strong>ROAS</strong> = Daromad ÷ Reklama summasi<br>
+        <strong>Sof foyda</strong> = Daromad − (Sotuvlar × Tannarx) − Reklama<br>
+        <strong>Kutilayotgan daromad</strong> = Yangi summa × Ko'zlanayotgan ROAS
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════ PANEL 2 — TARGET BYUDJET ══════════════════ -->
+  <div class="panel" id="panel-1">
+    <div class="card">
+      <div class="section-label">📊 Parametrlar</div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>🎯 Sotuv maqsadi (oyiga)</label>
+          <div class="input-wrap">
+            <input type="number" id="r2-sales" value="100" min="1" oninput="calcTarget()">
+            <span class="input-suffix">ta sotuv</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>💰 1 ta oddiy lid narxi</label>
+          <div class="input-wrap">
+            <input type="number" id="r2-leadcost" value="2" min="0" step="0.1" oninput="calcTarget()">
+            <span class="input-suffix">$</span>
+          </div>
+        </div>
+        <div class="input-group full">
+          <div class="range-group">
+            <div class="range-header"><label>🔄 Lid → Sifatli lid konversiyasi</label><span class="range-val" id="r2-c1val">50%</span></div>
+            <input type="range" id="r2-c1" min="10" max="90" value="50" oninput="calcTarget()">
+            <div class="range-labels"><span>10%</span><span>50%</span><span>90%</span></div>
+          </div>
+        </div>
+        <div class="input-group full">
+          <div class="range-group">
+            <div class="range-header"><label>✅ Sifatli lid → Sotuv konversiyasi</label><span class="range-val" id="r2-c2val">10%</span></div>
+            <input type="range" id="r2-c2" min="1" max="50" value="10" oninput="calcTarget()">
+            <div class="range-labels"><span>1%</span><span>25%</span><span>50%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-label">🔽 Funnel</div>
+      <div class="funnel-steps">
+        <div class="step s1"><div class="step-num">01</div><div><div class="step-title">Sotuv maqsadi</div><div class="step-desc">Bir oyda yopilishi kerak</div></div><div><div class="step-val" id="r2-f1">100 ta</div><div class="step-sub">TARGET</div></div></div>
+        <div class="connector" id="r2-con1">÷ 10% (sotuv konv.)</div>
+        <div class="step s2"><div class="step-num">02</div><div><div class="step-title">Sifatli lidlar</div><div class="step-desc">Qualified leads</div></div><div><div class="step-val" id="r2-f2">1,000 ta</div><div class="step-sub">QUALIFIED</div></div></div>
+        <div class="connector" id="r2-con2">÷ 50% (sifat konv.)</div>
+        <div class="step s3"><div class="step-num">03</div><div><div class="step-title">Oddiy lidlar</div><div class="step-desc">Reklamadan tushgan kontaktlar</div></div><div><div class="step-val" id="r2-f3">2,000 ta</div><div class="step-sub">RAW LEADS</div></div></div>
+        <div class="connector">× lid narxi</div>
+        <div class="step s4"><div class="step-num">04</div><div><div class="step-title">Kerakli byudjet</div><div class="step-desc">Umumiy reklama xarajati</div></div><div><div class="step-val" id="r2-f4">$4,000</div><div class="step-sub">$ / oy</div></div></div>
+      </div>
+    </div>
+    <div class="result-section">
+      <div class="result-grid">
+        <div class="res-card"><div class="res-label">💵 Oylik byudjet</div><div class="res-num big" id="r2-budget">$4,000</div><div class="res-sub">$ / oy</div></div>
+        <div class="res-card"><div class="res-label">📦 Jami lidlar</div><div class="res-num" id="r2-raw" style="color:var(--accent3)">2,000</div><div class="res-sub">ta oddiy lid kerak</div></div>
+        <div class="res-card"><div class="res-label">💸 1 sotuvga xarajat</div><div class="res-num" id="r2-cps" style="color:#a78bfa">$40</div><div class="res-sub">CAC</div></div>
+      </div>
+      <div class="formula-box"><strong>Oddiy lid</strong> = Sotuv ÷ (Sifat konv. × Sotuv konv.)<br><strong>Byudjet</strong> = Oddiy lid × Lid narxi<br><strong>CAC</strong> = Byudjet ÷ Sotuv maqsadi</div>
+    </div>
+    <div class="card">
+      <div class="section-label">📋 To'liq hisob</div>
+      <table class="breakdown-table"><thead><tr><th>Ko'rsatkich</th><th>Qiymat</th></tr></thead><tbody id="r2-table"></tbody></table>
     </div>
   </div>
 
-  <!-- BREAKDOWN TABLE -->
-  <div class="inputs-section">
-    <div class="section-label">📋 To'liq hisob</div>
-    <table class="breakdown-table">
-      <thead>
-        <tr>
-          <th>Ko'rsatkich</th>
-          <th>Qiymat</th>
-        </tr>
-      </thead>
-      <tbody id="breakdown-body">
-      </tbody>
-    </table>
+  <!-- ══════════════════ PANEL 3 — TO'LIQ HISOB ══════════════════ -->
+  <div class="panel" id="panel-2">
+    <div class="card">
+      <div class="section-label">📊 Barcha parametrlar</div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>🎯 Sotuv maqsadi (oyiga)</label>
+          <div class="input-wrap"><input type="number" id="r3-sales" value="100" min="1" oninput="calcFull()"><span class="input-suffix">ta</span></div>
+        </div>
+        <div class="input-group">
+          <label>💰 1 ta oddiy lid narxi</label>
+          <div class="input-wrap"><input type="number" id="r3-leadcost" value="2" min="0" step="0.1" oninput="calcFull()"><span class="input-suffix">$</span></div>
+        </div>
+        <div class="input-group">
+          <label>🛍️ 1 mahsulot o'rtacha narxi</label>
+          <div class="input-wrap"><input type="number" id="r3-price" value="50" min="0" step="1" oninput="calcFull()"><span class="input-suffix">$</span></div>
+        </div>
+        <div class="input-group">
+          <label>📦 Mahsulot tannarxi</label>
+          <div class="input-wrap"><input type="number" id="r3-cogs" value="20" min="0" step="1" oninput="calcFull()"><span class="input-suffix">$</span></div>
+        </div>
+        <div class="input-group full">
+          <div class="range-group">
+            <div class="range-header"><label>🔄 Lid → Sifatli lid konversiyasi</label><span class="range-val" id="r3-c1val">50%</span></div>
+            <input type="range" id="r3-c1" min="10" max="90" value="50" oninput="calcFull()">
+            <div class="range-labels"><span>10%</span><span>50%</span><span>90%</span></div>
+          </div>
+        </div>
+        <div class="input-group full">
+          <div class="range-group">
+            <div class="range-header"><label>✅ Sifatli lid → Sotuv konversiyasi</label><span class="range-val" id="r3-c2val">10%</span></div>
+            <input type="range" id="r3-c2" min="1" max="50" value="10" oninput="calcFull()">
+            <div class="range-labels"><span>1%</span><span>25%</span><span>50%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="result-section">
+      <div class="result-grid result-grid-4">
+        <div class="res-card"><div class="res-label">💵 Oylik byudjet</div><div class="res-num big" id="r3-budget">$4,000</div><div class="res-sub">$ / oy</div></div>
+        <div class="res-card"><div class="res-label">📈 Jami daromad</div><div class="res-num" id="r3-revenue" style="color:var(--green)">$5,000</div><div class="res-sub">$ / oy</div></div>
+        <div class="res-card"><div class="res-label">💸 Sof foyda</div><div class="res-num" id="r3-profit" style="color:#a78bfa">$1,000</div><div class="res-sub">$ / oy</div></div>
+        <div class="res-card"><div class="res-label">🚀 ROAS</div><div class="res-num" id="r3-roas" style="color:var(--accent3)">×1.25</div><div class="res-sub">har $1 ga qaytim</div></div>
+      </div>
+      <div class="roas-meter" style="margin-top:20px;">
+        <div class="roas-meter-label"><span>ROAS darajasi</span><span id="r3-roas-label" style="color:var(--accent)">×1.25</span></div>
+        <div class="roas-bar-bg"><div class="roas-bar-fill" id="r3-bar" style="width:25%"></div></div>
+        <div class="roas-zones"><span>×1 zarar</span><span>×2</span><span>×3 yaxshi</span><span>×5+</span></div>
+      </div>
+      <div class="formula-box"><strong>Byudjet</strong> = Lid soni × Lid narxi<br><strong>Daromad</strong> = Sotuv × Mahsulot narxi<br><strong>Sof foyda</strong> = Daromad − Tannarx − Byudjet<br><strong>ROAS</strong> = Daromad ÷ Byudjet</div>
+    </div>
+    <div class="card">
+      <div class="section-label">🔽 Funnel</div>
+      <div class="funnel-steps">
+        <div class="step s1"><div class="step-num">01</div><div><div class="step-title">Sotuv maqsadi</div><div class="step-desc">Bir oyda yopilishi kerak</div></div><div><div class="step-val" id="r3-f1">100 ta</div><div class="step-sub">TARGET</div></div></div>
+        <div class="connector" id="r3-con1">÷ 10%</div>
+        <div class="step s2"><div class="step-num">02</div><div><div class="step-title">Sifatli lidlar</div><div class="step-desc">Qualified leads</div></div><div><div class="step-val" id="r3-f2">1,000 ta</div><div class="step-sub">QUALIFIED</div></div></div>
+        <div class="connector" id="r3-con2">÷ 50%</div>
+        <div class="step s3"><div class="step-num">03</div><div><div class="step-title">Oddiy lidlar</div><div class="step-desc">Reklamadan tushgan</div></div><div><div class="step-val" id="r3-f3">2,000 ta</div><div class="step-sub">RAW LEADS</div></div></div>
+        <div class="connector">× lid narxi</div>
+        <div class="step s4"><div class="step-num">04</div><div><div class="step-title">Reklama byudjeti</div><div class="step-desc">Umumiy xarajat</div></div><div><div class="step-val" id="r3-f4">$4,000</div><div class="step-sub">$ / oy</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-label">📋 To'liq hisob</div>
+      <table class="breakdown-table"><thead><tr><th>Ko'rsatkich</th><th>Qiymat</th></tr></thead><tbody id="r3-table"></tbody></table>
+    </div>
   </div>
-  <h3 class="section-label" style="font-size: 18px !important; text-align: center !important;">Target lidlaringizni sotuvga aylantirish kerakmi? <br> <a target="blank" style="color: #00E5A0 !important;" href="https://t.me/zabihulloh_mrktlg">Bizga murojaat qiling</a></h3>
 
+  <!-- ══════════════════ CTA FOOTER ══════════════════ -->
+  <div class="cta-footer">
+    <div class="cta-footer-label">✦ Vena Agency</div>
+    <h2>Target natijalaringizni<br><span>yaxshilamoqchimisiz?</span></h2>
+    <p>Reklama strategiyasi, funnel optimallashtirish va<br>o'sish uchun biz bilan bog'laning.</p>
+    <a class="cta-btn" href="https://t.me/zabihulloh_mrktlg" target="_blank">
+      ✉️ Bog'lanish
+    </a>
+    <div class="cta-footer-note">Telegram orqali tezkor javob</div>
+  </div>
+
+  <div class="page-bottom"></div>
 </div>
 
 <script>
-function fmt(n) {
-  return parseFloat(n.toFixed(2)).toLocaleString('en-US');
+function fmt(n){if(isNaN(n)||!isFinite(n))return'—';return parseFloat(n.toFixed(2)).toLocaleString('en-US');}
+function pulse(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse');}
+function set(id,val){const el=document.getElementById(id);if(el){el.textContent=val;pulse(id);}}
+function rows(tbodyId,data){document.getElementById(tbodyId).innerHTML=data.map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('');}
+
+function switchTab(i){
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
+  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));
 }
 
-function calc() {
-  const sales = parseFloat(document.getElementById('sales').value) || 0;
-  const leadCost = parseFloat(document.getElementById('leadCost').value) || 0;
-  const productPrice = parseFloat(document.getElementById('productPrice').value) || 0;
-  const conv1 = parseFloat(document.getElementById('conv1').value) / 100; // lead -> qualified
-  const conv2 = parseFloat(document.getElementById('conv2').value) / 100; // qualified -> sale
+/* PANEL 1: ROAS */
+function calcRoas(){
+  const spend   = parseFloat(document.getElementById('r1-spend').value)   || 0;
+  const revenue = parseFloat(document.getElementById('r1-revenue').value) || 0;
+  const units   = parseFloat(document.getElementById('r1-units').value)   || 0;
+  const cogs    = parseFloat(document.getElementById('r1-cogs').value)    || 0;
+  const fspend  = parseFloat(document.getElementById('r1-fspend').value)  || 0;
+  const froas   = parseFloat(document.getElementById('r1-froas').value)   || 0;
 
-  document.getElementById('conv1Val').textContent = Math.round(conv1 * 100) + '%';
-  document.getElementById('conv2Val').textContent = Math.round(conv2 * 100) + '%';
+  const roas       = spend > 0 ? revenue / spend : 0;
+  const totalCogs  = units * cogs;
+  const profit     = revenue - totalCogs - spend;
+  const margin     = revenue > 0 ? (profit / revenue) * 100 : 0;
+  const cac        = units > 0 ? spend / units : 0;
+  const ppu        = units > 0 ? profit / units : 0;
+  const avgPrice   = units > 0 ? revenue / units : 0;
 
-  const qualified = conv2 > 0 ? sales / conv2 : 0;
-  const raw = conv1 > 0 ? qualified / conv1 : 0;
-  const budget = raw * leadCost;
-  const cps = sales > 0 ? budget / sales : 0;
-  const revenue = sales * productPrice;
-  const roas = budget > 0 ? revenue / budget : 0;
+  // future
+  const frev     = fspend * froas;
+  const funits   = avgPrice > 0 ? frev / avgPrice : 0;
+  const fprofit  = frev - (funits * cogs) - fspend;
 
-  // Funnel
-  document.getElementById('f-sales').textContent = fmt(sales) + ' ta';
-  document.getElementById('f-qualified').textContent = fmt(qualified) + ' ta';
-  document.getElementById('f-raw').textContent = fmt(raw) + ' ta';
-  document.getElementById('f-budget').textContent = '$' + fmt(budget);
+  set('r1-roas-now',  '×' + roas.toFixed(2));
+  set('r1-roas-label','×' + roas.toFixed(2));
+  set('r1-profit',    (profit>=0?'+$':'-$') + fmt(Math.abs(profit)));
+  set('r1-margin',    margin.toFixed(1) + '%');
+  set('r1-cac',       '$' + fmt(cac));
+  set('r1-ppu',       (ppu>=0?'+$':'-$') + fmt(Math.abs(ppu)));
 
-  document.getElementById('c1-label').textContent = '÷ ' + Math.round(conv2 * 100) + '% (sotuv konv.)';
-  document.getElementById('c2-label').textContent = '÷ ' + Math.round(conv1 * 100) + '% (sifat konv.)';
+  set('r1-frev',    '$' + fmt(frev));
+  set('r1-fprofit', (fprofit>=0?'+$':'-$') + fmt(Math.abs(fprofit)));
+  set('r1-funits',  fmt(funits) + ' ta');
 
-  // Results
-  animateVal('r-budget', '$' + fmt(budget));
-  animateVal('r-raw', fmt(raw));
-  animateVal('r-cps', '$' + fmt(cps));
-  animateVal('r-revenue', '$' + fmt(revenue));
-  animateVal('r-roas', '×' + roas.toFixed(2));
+  const pct = Math.min((roas/5)*100, 100);
+  document.getElementById('r1-bar').style.width = pct + '%';
 
-  // Breakdown
-  const rows = [
-    ['Sotuv maqsadi', fmt(sales) + ' ta'],
-    ['Sotuv konversiyasi', Math.round(conv2 * 100) + '%'],
-    ['Kerakli sifatli lidlar', fmt(qualified) + ' ta'],
-    ['Sifat konversiyasi', Math.round(conv1 * 100) + '%'],
-    ['Kerakli oddiy lidlar', fmt(raw) + ' ta'],
-    ['1 ta lid narxi', '$' + fmt(leadCost)],
-    ['1 mahsulot narxi', '$' + fmt(productPrice)],
-    ['Jami byudjet', '$' + fmt(budget)],
-    ['Jami daromad', '$' + fmt(revenue)],
-    ['1 sotuvga xarajat (CAC)', '$' + fmt(cps)],
-    ['ROAS', '×' + roas.toFixed(2)],
-  ];
-
-  document.getElementById('breakdown-body').innerHTML = rows.map(([k, v]) =>
-    `<tr><td>${k}</td><td>${v}</td></tr>`
-  ).join('');
+  const badge = document.getElementById('r1-badge');
+  if(roas>=3){badge.className='status-badge badge-good';badge.textContent='✓ Yaxshi ROAS';}
+  else if(roas>=2){badge.className='status-badge badge-ok';badge.textContent='~ O\'rtacha ROAS';}
+  else{badge.className='status-badge badge-bad';badge.textContent='✗ Past ROAS';}
 }
 
-function animateVal(id, val) {
-  const el = document.getElementById(id);
-  el.textContent = val;
-  el.classList.remove('pulse');
-  void el.offsetWidth;
-  el.classList.add('pulse');
+/* PANEL 2: TARGET BYUDJET */
+function calcTarget(){
+  const sales    = parseFloat(document.getElementById('r2-sales').value)    || 0;
+  const leadCost = parseFloat(document.getElementById('r2-leadcost').value) || 0;
+  const c1 = parseFloat(document.getElementById('r2-c1').value)/100;
+  const c2 = parseFloat(document.getElementById('r2-c2').value)/100;
+  document.getElementById('r2-c1val').textContent=Math.round(c1*100)+'%';
+  document.getElementById('r2-c2val').textContent=Math.round(c2*100)+'%';
+  const qualified=c2>0?sales/c2:0;
+  const raw=c1>0?qualified/c1:0;
+  const budget=raw*leadCost;
+  const cps=sales>0?budget/sales:0;
+  set('r2-f1',fmt(sales)+' ta'); set('r2-f2',fmt(qualified)+' ta'); set('r2-f3',fmt(raw)+' ta'); set('r2-f4','$'+fmt(budget));
+  document.getElementById('r2-con1').textContent='÷ '+Math.round(c2*100)+'% (sotuv konv.)';
+  document.getElementById('r2-con2').textContent='÷ '+Math.round(c1*100)+'% (sifat konv.)';
+  set('r2-budget','$'+fmt(budget)); set('r2-raw',fmt(raw)); set('r2-cps','$'+fmt(cps));
+  rows('r2-table',[
+    ['Sotuv maqsadi',fmt(sales)+' ta'],
+    ['Sotuv konversiyasi',Math.round(c2*100)+'%'],
+    ['Kerakli sifatli lidlar',fmt(qualified)+' ta'],
+    ['Sifat konversiyasi',Math.round(c1*100)+'%'],
+    ['Kerakli oddiy lidlar',fmt(raw)+' ta'],
+    ['1 ta lid narxi','$'+fmt(leadCost)],
+    ['Jami byudjet','$'+fmt(budget)],
+    ['1 sotuvga xarajat (CAC)','$'+fmt(cps)],
+  ]);
 }
 
-calc();
+/* PANEL 3: TO'LIQ HISOB */
+function calcFull(){
+  const sales    = parseFloat(document.getElementById('r3-sales').value)    || 0;
+  const leadCost = parseFloat(document.getElementById('r3-leadcost').value) || 0;
+  const price    = parseFloat(document.getElementById('r3-price').value)    || 0;
+  const cogs     = parseFloat(document.getElementById('r3-cogs').value)     || 0;
+  const c1 = parseFloat(document.getElementById('r3-c1').value)/100;
+  const c2 = parseFloat(document.getElementById('r3-c2').value)/100;
+  document.getElementById('r3-c1val').textContent=Math.round(c1*100)+'%';
+  document.getElementById('r3-c2val').textContent=Math.round(c2*100)+'%';
+  const qualified=c2>0?sales/c2:0;
+  const raw=c1>0?qualified/c1:0;
+  const budget=raw*leadCost;
+  const revenue=sales*price;
+  const totalCogs=sales*cogs;
+  const profit=revenue-totalCogs-budget;
+  const roas=budget>0?revenue/budget:0;
+  const cac=sales>0?budget/sales:0;
+  set('r3-f1',fmt(sales)+' ta'); set('r3-f2',fmt(qualified)+' ta'); set('r3-f3',fmt(raw)+' ta'); set('r3-f4','$'+fmt(budget));
+  document.getElementById('r3-con1').textContent='÷ '+Math.round(c2*100)+'%';
+  document.getElementById('r3-con2').textContent='÷ '+Math.round(c1*100)+'%';
+  set('r3-budget','$'+fmt(budget)); set('r3-revenue','$'+fmt(revenue));
+  set('r3-profit',(profit>=0?'+$':'-$')+fmt(Math.abs(profit)));
+  set('r3-roas','×'+roas.toFixed(2)); set('r3-roas-label','×'+roas.toFixed(2));
+  document.getElementById('r3-bar').style.width=Math.min((roas/5)*100,100)+'%';
+  rows('r3-table',[
+    ['Sotuv maqsadi',fmt(sales)+' ta'],
+    ['Sotuv konversiyasi',Math.round(c2*100)+'%'],
+    ['Kerakli sifatli lidlar',fmt(qualified)+' ta'],
+    ['Sifat konversiyasi',Math.round(c1*100)+'%'],
+    ['Kerakli oddiy lidlar',fmt(raw)+' ta'],
+    ['1 ta lid narxi','$'+fmt(leadCost)],
+    ['Jami reklama byudjeti','$'+fmt(budget)],
+    ['1 mahsulot narxi','$'+fmt(price)],
+    ['1 mahsulot tannarxi','$'+fmt(cogs)],
+    ['Jami daromad','$'+fmt(revenue)],
+    ['Jami tannarx','$'+fmt(totalCogs)],
+    ['Sof foyda',(profit>=0?'+$':'-$')+fmt(Math.abs(profit))],
+    ['1 sotuvga xarajat (CAC)','$'+fmt(cac)],
+    ['ROAS','×'+roas.toFixed(2)],
+  ]);
+}
+
+calcRoas(); calcTarget(); calcFull();
 </script>
 </body>
 </html>
